@@ -1,8 +1,3 @@
-
 export default function Home() {
-  return (
-    <h3 className='text-3xl font-semibold'>
-      Carsties
-    </h3>
-  )
+  return <div>content goes here...</div>;
 }
