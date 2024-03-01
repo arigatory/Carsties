@@ -39,7 +39,7 @@ const filterButtons = [
   {
     label: "Completed",
     icon: BsStopwatchFill,
-    value: "finish",
+    value: "finished",
   },
 ];
 
