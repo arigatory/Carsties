@@ -5,11 +5,10 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 
 namespace IdentityService.Pages.Account.Register
 {
-    [SecurityHeaders]
+  [SecurityHeaders]
     [AllowAnonymous]
     public class Index : PageModel
     {
