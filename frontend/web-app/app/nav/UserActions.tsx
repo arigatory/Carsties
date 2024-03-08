@@ -21,20 +21,20 @@ export default function UserActions({ user }: Props) {
 
   function setWinner() {
     setParams({ winner: user.username, seller: undefined });
-    if (pathname !== '/') router.push('/')
+    if (pathname !== "/") router.push("/");
   }
 
   function setSeller() {
     setParams({ seller: user.username, winner: undefined });
-    if (pathname !== '/') router.push('/')
+    if (pathname !== "/") router.push("/");
   }
   return (
     <Dropdown label={`Welcome ${user?.name}`} inline>
       <Dropdown.Item icon={HiUser} onClick={setSeller}>
-          My Auctions
+        My Auctions
       </Dropdown.Item>
       <Dropdown.Item icon={AiFillTrophy} onClick={setWinner}>
-          Auctions won
+        Auctions won
       </Dropdown.Item>
       <Dropdown.Item icon={AiFillCar}>
         <Link href={"/auctions/create"}>Sell my car</Link>

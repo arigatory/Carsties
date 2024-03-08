@@ -12,7 +12,7 @@ public class AuctionDeletedConsumer : IConsumer<AuctionDeleted>
 
     public AuctionDeletedConsumer(IMapper mapper)
     {
-        _mapper = mapper;
+        this._mapper = mapper;
     }
 
     public async Task Consume(ConsumeContext<AuctionDeleted> context)

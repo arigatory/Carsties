@@ -11,12 +11,12 @@ public class IndexModel : PageModel
 
     public IActionResult OnGet(string redirectUri)
     {
-        if (!Url.IsLocalUrl(redirectUri))
+        if (!this.Url.IsLocalUrl(redirectUri))
         {
-            return RedirectToPage("/Home/Error/Index");
+            return this.RedirectToPage("/Home/Error/Index");
         }
 
-        RedirectUri = redirectUri;
-        return Page();
+        this.RedirectUri = redirectUri;
+        return this.Page();
     }
 }

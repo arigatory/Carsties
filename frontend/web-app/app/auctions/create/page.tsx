@@ -9,7 +9,7 @@ export default function Create() {
         title="Sell you car!"
         subtitle="Please enter the details of your car"
       />
-      <AuctionForm/>
+      <AuctionForm />
     </div>
   );
 }

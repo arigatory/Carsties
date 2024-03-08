@@ -1,12 +1,16 @@
 ﻿@font-face {
-  font-family: 'Font Awesome 5 Free';
+  font-family: "Font Awesome 5 Free";
   font-style: normal;
   font-weight: 900;
   src: url("../fonts/fontawesome/fa-solid-900.eot");
-  src: url("../fonts/fontawesome/fa-solid-900.eot?#iefix") format("embedded-opentype"), url("../fonts/fontawesome/fa-solid-900.woff2") format("woff2"), url("../fonts/fontawesome/fa-solid-900.ttf") format("truetype"), url("../fonts/fontawesome/fa-solid-900.svg#fontawesome") format("svg");
+  src: url("../fonts/fontawesome/fa-solid-900.eot?#iefix")
+      format("embedded-opentype"),
+    url("../fonts/fontawesome/fa-solid-900.woff2") format("woff2"),
+    url("../fonts/fontawesome/fa-solid-900.ttf") format("truetype"),
+    url("../fonts/fontawesome/fa-solid-900.svg#fontawesome") format("svg");
 }
 .glyphicon {
-  font-family: 'Font Awesome 5 Free';
+  font-family: "Font Awesome 5 Free";
 }
 .glyphicon.glyphicon-chevron-up::before {
   content: "\f077";

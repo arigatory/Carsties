@@ -29,13 +29,13 @@ public class Callback : PageModel
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager)
     {
-        _userManager = userManager;
-        _signInManager = signInManager;
-        _interaction = interaction;
-        _logger = logger;
-        _events = events;
+        this._userManager = userManager;
+        this._signInManager = signInManager;
+        this._interaction = interaction;
+        this._logger = logger;
+        this._events = events;
     }
-        
+
     public async Task<IActionResult> OnGet()
     {
         // read external identity from the temporary cookie
@@ -47,10 +47,10 @@ public class Callback : PageModel
 
         var externalUser = result.Principal;
 
-        if (_logger.IsEnabled(LogLevel.Debug))
+        if (this._logger.IsEnabled(LogLevel.Debug))
         {
             var externalClaims = externalUser.Claims.Select(c => $"{c.Type}: {c.Value}");
-            _logger.LogDebug("External claims: {@claims}", externalClaims);
+            this._logger.LogDebug("External claims: {@claims}", externalClaims);
         }
 
         // lookup our user and external provider info
@@ -65,7 +65,7 @@ public class Callback : PageModel
         var providerUserId = userIdClaim.Value;
 
         // find external user
-        var user = await _userManager.FindByLoginAsync(provider, providerUserId);
+        var user = await this._userManager.FindByLoginAsync(provider, providerUserId);
         if (user == null)
         {
             // this might be where you might initiate a custom workflow for user registration
@@ -82,7 +82,7 @@ public class Callback : PageModel
         CaptureExternalLoginContext(result, additionalLocalClaims, localSignInProps);
 
         // issue authentication cookie for user
-        await _signInManager.SignInWithClaimsAsync(user, localSignInProps, additionalLocalClaims);
+        await this._signInManager.SignInWithClaimsAsync(user, localSignInProps, additionalLocalClaims);
 
         // delete temporary cookie used during external authentication
         await HttpContext.SignOutAsync(IdentityServerConstants.ExternalCookieAuthenticationScheme);
@@ -91,8 +91,8 @@ public class Callback : PageModel
         var returnUrl = result.Properties.Items["returnUrl"] ?? "~/";
 
         // check if external login is in the context of an OIDC request
-        var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
-        await _events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, user.UserName, true, context?.Client.ClientId));
+        var context = await this._interaction.GetAuthorizationContextAsync(returnUrl);
+        await this._events.RaiseAsync(new UserLoginSuccessEvent(provider, providerUserId, user.Id, user.UserName, true, context?.Client.ClientId));
 
         if (context != null)
         {
@@ -110,7 +110,7 @@ public class Callback : PageModel
     private async Task<ApplicationUser> AutoProvisionUserAsync(string provider, string providerUserId, IEnumerable<Claim> claims)
     {
         var sub = Guid.NewGuid().ToString();
-            
+
         var user = new ApplicationUser
         {
             Id = sub,
@@ -124,7 +124,7 @@ public class Callback : PageModel
         {
             user.Email = email;
         }
-            
+
         // create a list of claims that we want to transfer into our store
         var filtered = new List<Claim>();
 
@@ -155,17 +155,20 @@ public class Callback : PageModel
             }
         }
 
-        var identityResult = await _userManager.CreateAsync(user);
-        if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+        var identityResult = await this._userManager.CreateAsync(user);
+        if (!identityResult.Succeeded)
+            throw new Exception(identityResult.Errors.First().Description);
 
         if (filtered.Any())
         {
-            identityResult = await _userManager.AddClaimsAsync(user, filtered);
-            if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+            identityResult = await this._userManager.AddClaimsAsync(user, filtered);
+            if (!identityResult.Succeeded)
+                throw new Exception(identityResult.Errors.First().Description);
         }
 
-        identityResult = await _userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
-        if (!identityResult.Succeeded) throw new Exception(identityResult.Errors.First().Description);
+        identityResult = await this._userManager.AddLoginAsync(user, new UserLoginInfo(provider, providerUserId, provider));
+        if (!identityResult.Succeeded)
+            throw new Exception(identityResult.Errors.First().Description);
 
         return user;
     }

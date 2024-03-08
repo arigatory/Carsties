@@ -11,14 +11,14 @@ public class AuctionFinishedConsumer : IConsumer<AuctionFinished>
 
     public AuctionFinishedConsumer(AuctionDbContext dbContext)
     {
-        _dbContext = dbContext;
+        this._dbContext = dbContext;
     }
 
     public async Task Consume(ConsumeContext<AuctionFinished> context)
     {
         Console.WriteLine("--> Consuming auction finished");
 
-        var auction = await _dbContext.Auctions.FindAsync(context.Message.AuctionId);
+        var auction = await this._dbContext.Auctions.FindAsync(context.Message.AuctionId);
 
         if (context.Message.ItemSold)
         {
@@ -29,6 +29,6 @@ public class AuctionFinishedConsumer : IConsumer<AuctionFinished>
         auction.Status = auction.SoldAmount > auction.ReservePrice
             ? Status.Finished : Status.ReserveNotMet;
 
-        await _dbContext.SaveChangesAsync();
+        await this._dbContext.SaveChangesAsync();
     }
 }

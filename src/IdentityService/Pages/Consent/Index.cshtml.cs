@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 namespace IdentityService.Pages.Consent;
 
 [Authorize]
-[SecurityHeadersAttribute]
+[SecurityHeaders]
 public class Index : PageModel
 {
     private readonly IIdentityServerInteractionService _interaction;
@@ -23,55 +23,56 @@ public class Index : PageModel
         IEventService events,
         ILogger<Index> logger)
     {
-        _interaction = interaction;
-        _events = events;
-        _logger = logger;
+        this._interaction = interaction;
+        this._events = events;
+        this._logger = logger;
     }
 
     public ViewModel View { get; set; }
-        
+
     [BindProperty]
     public InputModel Input { get; set; }
 
     public async Task<IActionResult> OnGet(string returnUrl)
     {
-        View = await BuildViewModelAsync(returnUrl);
-        if (View == null)
+        this.View = await this.BuildViewModelAsync(returnUrl);
+        if (this.View == null)
         {
-            return RedirectToPage("/Home/Error/Index");
+            return this.RedirectToPage("/Home/Error/Index");
         }
 
-        Input = new InputModel
+        this.Input = new InputModel
         {
             ReturnUrl = returnUrl,
         };
 
-        return Page();
+        return this.Page();
     }
 
     public async Task<IActionResult> OnPost()
     {
         // validate return url is still valid
-        var request = await _interaction.GetAuthorizationContextAsync(Input.ReturnUrl);
-        if (request == null) return RedirectToPage("/Home/Error/Index");
+        var request = await this._interaction.GetAuthorizationContextAsync(this.Input.ReturnUrl);
+        if (request == null)
+            return this.RedirectToPage("/Home/Error/Index");
 
         ConsentResponse grantedConsent = null;
 
         // user clicked 'no' - send back the standard 'access_denied' response
-        if (Input?.Button == "no")
+        if (this.Input?.Button == "no")
         {
             grantedConsent = new ConsentResponse { Error = AuthorizationError.AccessDenied };
 
             // emit event
-            await _events.RaiseAsync(new ConsentDeniedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
+            await this._events.RaiseAsync(new ConsentDeniedEvent(this.User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues));
         }
         // user clicked 'yes' - validate the data
-        else if (Input?.Button == "yes")
+        else if (this.Input?.Button == "yes")
         {
             // if the user consented to some scope, build the response model
-            if (Input.ScopesConsented != null && Input.ScopesConsented.Any())
+            if (this.Input.ScopesConsented != null && this.Input.ScopesConsented.Any())
             {
-                var scopes = Input.ScopesConsented;
+                var scopes = this.Input.ScopesConsented;
                 if (ConsentOptions.EnableOfflineAccess == false)
                 {
                     scopes = scopes.Where(x => x != Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess);
@@ -79,55 +80,55 @@ public class Index : PageModel
 
                 grantedConsent = new ConsentResponse
                 {
-                    RememberConsent = Input.RememberConsent,
+                    RememberConsent = this.Input.RememberConsent,
                     ScopesValuesConsented = scopes.ToArray(),
-                    Description = Input.Description
+                    Description = this.Input.Description
                 };
 
                 // emit event
-                await _events.RaiseAsync(new ConsentGrantedEvent(User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
+                await this._events.RaiseAsync(new ConsentGrantedEvent(this.User.GetSubjectId(), request.Client.ClientId, request.ValidatedResources.RawScopeValues, grantedConsent.ScopesValuesConsented, grantedConsent.RememberConsent));
             }
             else
             {
-                ModelState.AddModelError("", ConsentOptions.MustChooseOneErrorMessage);
+                this.ModelState.AddModelError("", ConsentOptions.MustChooseOneErrorMessage);
             }
         }
         else
         {
-            ModelState.AddModelError("", ConsentOptions.InvalidSelectionErrorMessage);
+            this.ModelState.AddModelError("", ConsentOptions.InvalidSelectionErrorMessage);
         }
 
         if (grantedConsent != null)
         {
             // communicate outcome of consent back to identityserver
-            await _interaction.GrantConsentAsync(request, grantedConsent);
+            await this._interaction.GrantConsentAsync(request, grantedConsent);
 
             // redirect back to authorization endpoint
             if (request.IsNativeClient() == true)
             {
                 // The client is native, so this change in how to
                 // return the response is for better UX for the end user.
-                return this.LoadingPage(Input.ReturnUrl);
+                return this.LoadingPage(this.Input.ReturnUrl);
             }
 
-            return Redirect(Input.ReturnUrl);
+            return this.Redirect(this.Input.ReturnUrl);
         }
 
         // we need to redisplay the consent UI
-        View = await BuildViewModelAsync(Input.ReturnUrl, Input);
-        return Page();
+        this.View = await this.BuildViewModelAsync(this.Input.ReturnUrl, this.Input);
+        return this.Page();
     }
 
     private async Task<ViewModel> BuildViewModelAsync(string returnUrl, InputModel model = null)
     {
-        var request = await _interaction.GetAuthorizationContextAsync(returnUrl);
+        var request = await this._interaction.GetAuthorizationContextAsync(returnUrl);
         if (request != null)
         {
             return CreateConsentViewModel(model, returnUrl, request);
         }
         else
         {
-            _logger.LogError("No consent request matching request: {0}", returnUrl);
+            this._logger.LogError("No consent request matching request: {0}", returnUrl);
         }
         return null;
     }
@@ -169,7 +170,7 @@ public class Index : PageModel
         }
         if (ConsentOptions.EnableOfflineAccess && request.ValidatedResources.Resources.OfflineAccess)
         {
-            apiScopes.Add(GetOfflineAccessScope(model == null || model.ScopesConsented?.Contains(Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess) == true));
+            apiScopes.Add(this.GetOfflineAccessScope(model == null || model.ScopesConsented?.Contains(Duende.IdentityServer.IdentityServerConstants.StandardScopes.OfflineAccess) == true));
         }
         vm.ApiScopes = apiScopes;
 
@@ -193,7 +194,7 @@ public class Index : PageModel
     public ScopeViewModel CreateScopeViewModel(ParsedScopeValue parsedScopeValue, ApiScope apiScope, bool check)
     {
         var displayName = apiScope.DisplayName ?? apiScope.Name;
-        if (!String.IsNullOrWhiteSpace(parsedScopeValue.ParsedParameter))
+        if (!string.IsNullOrWhiteSpace(parsedScopeValue.ParsedParameter))
         {
             displayName += ":" + parsedScopeValue.ParsedParameter;
         }

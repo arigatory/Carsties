@@ -22,19 +22,19 @@ public class BidsController : ControllerBase
         if (auction == null)
         {
             // Todo: check
-            return NotFound();
+            return this.NotFound();
         }
 
-        if (auction.Seller == User.Identity.Name)
+        if (auction.Seller == this.User.Identity.Name)
         {
-            return BadRequest("You cannot bid on your own auction");
+            return this.BadRequest("You cannot bid on your own auction");
         }
 
         var bid = new Bid
         {
             Amount = amount,
             AuctionId = auctionId,
-            Bidder = User.Identity.Name,
+            Bidder = this.User.Identity.Name,
         };
 
         if (auction.AuctionEnd < DateTime.UtcNow)
@@ -63,6 +63,17 @@ public class BidsController : ControllerBase
 
         await DB.SaveAsync(bid);
 
-        return Ok(bid);
+        return this.Ok(bid);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<List<Bid>>> GetBidsForAuction(string auctionId)
+    {
+        var bids = await DB.Find<Bid>()
+            .Match(a => a.AuctionId == auctionId)
+            .Sort(b => b.Descending(a => a.BidTime))
+            .ExecuteAsync();
+
+        return bids;
     }
 }

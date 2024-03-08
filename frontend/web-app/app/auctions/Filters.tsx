@@ -51,9 +51,10 @@ export default function Filters() {
 
   return (
     <div className=" flex justify-between items-center mb-4">
-
-<div>
-        <span className=" uppercase text-sm text-gray-500 mr-2 ">Filter by</span>
+      <div>
+        <span className=" uppercase text-sm text-gray-500 mr-2 ">
+          Filter by
+        </span>
         <Button.Group>
           {filterButtons.map(({ label, icon: Icon, value }) => (
             <Button

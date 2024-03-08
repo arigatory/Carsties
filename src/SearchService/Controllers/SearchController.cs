@@ -48,7 +48,7 @@ public class SearchController : ControllerBase
 
         var result = await query.ExecuteAsync();
 
-        return Ok(new
+        return this.Ok(new
         {
             results = result.Results,
             pageCount = result.PageCount,
