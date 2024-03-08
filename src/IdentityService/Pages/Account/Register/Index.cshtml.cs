@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace IdentityService.Pages.Account.Register
 {
-    [SecurityHeaders]
+  [SecurityHeaders]
     [AllowAnonymous]
     public class Index : PageModel
     {
@@ -16,7 +16,7 @@ namespace IdentityService.Pages.Account.Register
 
         public Index(UserManager<ApplicationUser> userManager)
         {
-            this._userManager = userManager;
+            _userManager = userManager;
         }
 
         [BindProperty]
@@ -27,42 +27,39 @@ namespace IdentityService.Pages.Account.Register
 
         public IActionResult OnGet(string returnUrl)
         {
-            this.Input = new RegisterViewModel
+            Input = new RegisterViewModel
             {
                 ReturnUrl = returnUrl,
             };
 
-            return this.Page();
+            return Page();
         }
 
         public async Task<IActionResult> OnPost()
         {
-            if (this.Input.Button != "register")
-                return this.Redirect("~/");
-
-            if (this.ModelState.IsValid)
-            {
-                var user = new ApplicationUser
-                {
-                    UserName = this.Input.Username,
-                    Email = this.Input.Email,
+            if (Input.Button != "register") return Redirect("~/");
+            
+            if (ModelState.IsValid) {
+                var user = new ApplicationUser{
+                    UserName = Input.Username,
+                    Email = Input.Email,
                     EmailConfirmed = true
                 };
 
-                var result = await this._userManager.CreateAsync(user, this.Input.Password);
+                var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
-                    await this._userManager.AddClaimsAsync(user, new Claim[]
+                    await _userManager.AddClaimsAsync(user, new Claim[]
                     {
-                        new(JwtClaimTypes.Name, this.Input.FullName)
+                        new(JwtClaimTypes.Name, Input.FullName)
                     });
 
-                    this.RegisterSuccess = true;
+                    RegisterSuccess = true;
                 }
             }
 
-            return this.Page();
+            return Page();
         }
     }
 }

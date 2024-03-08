@@ -8,26 +8,26 @@ namespace IdentityService.Pages.Logout;
 [AllowAnonymous]
 public class LoggedOut : PageModel
 {
-  private readonly IIdentityServerInteractionService _interactionService;
+    private readonly IIdentityServerInteractionService _interactionService;
+        
+    public LoggedOutViewModel View { get; set; }
 
-  public LoggedOutViewModel View { get; set; }
-
-  public LoggedOut(IIdentityServerInteractionService interactionService)
-  {
-        this._interactionService = interactionService;
-  }
-
-  public async Task OnGet(string logoutId)
-  {
-    // get context information (client name, post logout redirect URI and iframe for federated signout)
-    var logout = await this._interactionService.GetLogoutContextAsync(logoutId);
-
-        this.View = new LoggedOutViewModel
+    public LoggedOut(IIdentityServerInteractionService interactionService)
     {
-      AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut,
-      PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
-      ClientName = string.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
-      SignOutIframeUrl = logout?.SignOutIFrameUrl
-    };
-  }
+        _interactionService = interactionService;
+    }
+
+    public async Task OnGet(string logoutId)
+    {
+        // get context information (client name, post logout redirect URI and iframe for federated signout)
+        var logout = await _interactionService.GetLogoutContextAsync(logoutId);
+
+        View = new LoggedOutViewModel
+        {
+            AutomaticRedirectAfterSignOut = LogoutOptions.AutomaticRedirectAfterSignOut,
+            PostLogoutRedirectUri = logout?.PostLogoutRedirectUri,
+            ClientName = String.IsNullOrEmpty(logout?.ClientName) ? logout?.ClientId : logout?.ClientName,
+            SignOutIframeUrl = logout?.SignOutIFrameUrl
+        };
+    }
 }

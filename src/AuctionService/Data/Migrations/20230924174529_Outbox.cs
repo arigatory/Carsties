@@ -5,8 +5,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace AuctionService.Data.Migrations
 {
-    /// <inheritdoc />
-    public partial class Outbox : Migration
+  /// <inheritdoc />
+  public partial class Outbox : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

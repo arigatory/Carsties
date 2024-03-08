@@ -17,7 +17,7 @@ export default function DeleteButton({ id }: Props) {
     setLoading(true);
     deleteAuction(id)
       .then((res) => {
-        console.log(res);
+        console.log(res)
         if (res.error) throw res.error;
         router.push("/");
       })

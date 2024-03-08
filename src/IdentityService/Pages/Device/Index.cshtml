@@ -7,37 +7,37 @@
 {
     @*We need to collect the user code*@
     <div class="page-device-code">
-    <div class="lead">
-        <h1>User Code</h1>
-        <p>Please enter the code displayed on your device.</p>
-    </div>
+        <div class="lead">
+            <h1>User Code</h1>
+            <p>Please enter the code displayed on your device.</p>
+        </div>
 
-    <div class="row">
-        <div class="col-sm-8">
-            <partial name="_ValidationSummary" />
+        <div class="row">
+            <div class="col-sm-8">
+                <partial name="_ValidationSummary" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-6">
+                <form asp-page="/Device/Index" method="get">
+                    <div class="form-group">
+                        <label for="userCode">User Code:</label>
+                        <input class="form-control" for="userCode" name="userCode" autofocus />
+                    </div>
+
+                    <button class="btn btn-primary" name="button">Submit</button>
+                </form>
+            </div>
         </div>
     </div>
-
-    <div class="row">
-        <div class="col-sm-6">
-            <form asp-page="/Device/Index" method="get">
-                <div class="form-group">
-                    <label for="userCode">User Code:</label>
-                    <input class="form-control" for="userCode" name="userCode" autofocus />
-                </div>
-
-                <button class="btn btn-primary" name="button">Submit</button>
-            </form>
-        </div>
-    </div>
-</div>
 }
 else
 {
     @*collect consent for the user code provided*@
     <div class="page-device-confirmation">
-    <div class="lead">
-        @if (Model.View.ClientLogoUrl != null)
+        <div class="lead">
+            @if (Model.View.ClientLogoUrl != null)
             {
                 <div class="client-logo"><img src="@Model.View.ClientLogoUrl"></div>
             }
@@ -102,8 +102,7 @@ else
                                 Description
                             </div>
                             <div class="card-body">
-                                <input class="form-control" placeholder="Description or name of device"
-                                    asp-for="Input.Description" autofocus>
+                                <input class="form-control" placeholder="Description or name of device" asp-for="Input.Description" autofocus>
                             </div>
                         </div>
                     </div>

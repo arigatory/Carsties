@@ -12,18 +12,17 @@ public class AuctionCreatedConsumer : IConsumer<AuctionCreated>
 
     public AuctionCreatedConsumer(IMapper mapper)
     {
-        this._mapper = mapper;
+        _mapper = mapper;
     }
 
     public async Task Consume(ConsumeContext<AuctionCreated> context)
     {
         System.Console.WriteLine("--> Consuming auction created: " + context.Message.Id);
 
-        var item = this._mapper.Map<Item>(context.Message);
+        var item = _mapper.Map<Item>(context.Message);
 
-        if (item.Model == "Foo")
-            throw new ArgumentException("Cannot sell cars with the name of Foo");
+        if (item.Model == "Foo") throw new ArgumentException("Cannot sell cars with the name of Foo");
 
-        await item.SaveAsync();
+        await item.SaveAsync();        
     }
 }

@@ -13,7 +13,7 @@ public class ViewModel
 {
     public ViewModel(AuthenticateResult result)
     {
-        this.AuthenticateResult = result;
+        AuthenticateResult = result;
 
         if (result.Properties.Items.ContainsKey("client_list"))
         {
@@ -21,7 +21,7 @@ public class ViewModel
             var bytes = Base64Url.Decode(encoded);
             var value = Encoding.UTF8.GetString(bytes);
 
-            this.Clients = JsonSerializer.Deserialize<string[]>(value);
+            Clients = JsonSerializer.Deserialize<string[]>(value);
         }
     }
 

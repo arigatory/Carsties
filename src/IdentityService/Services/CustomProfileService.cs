@@ -9,28 +9,28 @@ namespace IdentityService;
 
 public class CustomProfileService : IProfileService
 {
-  private readonly UserManager<ApplicationUser> _userManager;
+    private readonly UserManager<ApplicationUser> _userManager;
 
-  public CustomProfileService(UserManager<ApplicationUser> userManager)
-  {
-        this._userManager = userManager;
-  }
-  public async Task GetProfileDataAsync(ProfileDataRequestContext context)
-  {
-    var user = await this._userManager.GetUserAsync(context.Subject);
-    var existingClaims = await this._userManager.GetClaimsAsync(user);
+    public CustomProfileService(UserManager<ApplicationUser> userManager)
+    {
+        _userManager = userManager;
+    }
+    public async Task GetProfileDataAsync(ProfileDataRequestContext context)
+    {
+        var user = await _userManager.GetUserAsync(context.Subject);
+        var existingClaims = await _userManager.GetClaimsAsync(user);
 
-    var claims = new List<Claim>
+        var claims = new List<Claim>
         {
             new Claim("username", user.UserName)
         };
 
-    context.IssuedClaims.AddRange(claims);
-    context.IssuedClaims.Add(existingClaims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name));
-  }
+        context.IssuedClaims.AddRange(claims);
+        context.IssuedClaims.Add(existingClaims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name));
+    }
 
-  public Task IsActiveAsync(IsActiveContext context)
-  {
-    return Task.CompletedTask;
-  }
+    public Task IsActiveAsync(IsActiveContext context)
+    {
+        return Task.CompletedTask;
+    }
 }

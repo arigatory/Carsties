@@ -25,11 +25,11 @@ public class AllModel : PageModel
 
     public AllModel(IBackchannelAuthenticationInteractionService backchannelAuthenticationInteractionService)
     {
-        this._backchannelAuthenticationInteraction = backchannelAuthenticationInteractionService;
+        _backchannelAuthenticationInteraction = backchannelAuthenticationInteractionService;
     }
 
     public async Task OnGet()
     {
-        this.Logins = await this._backchannelAuthenticationInteraction.GetPendingLoginRequestsForCurrentUserAsync();
+        Logins = await _backchannelAuthenticationInteraction.GetPendingLoginRequestsForCurrentUserAsync();
     }
 }
