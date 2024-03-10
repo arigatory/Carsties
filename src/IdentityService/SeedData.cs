@@ -17,7 +17,10 @@ public class SeedData
 
         var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        if (userMgr.Users.Any()) return;
+        if (userMgr.Users.Any())
+        {
+            return;
+        }
 
         var alice = userMgr.FindByNameAsync("alice").Result;
         if (alice == null)
