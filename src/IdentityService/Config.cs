@@ -1,6 +1,5 @@
-﻿using Duende.IdentityServer.Models;
-
-namespace IdentityService;
+﻿namespace IdentityService;
+using Duende.IdentityServer.Models;
 
 public static class Config
 {

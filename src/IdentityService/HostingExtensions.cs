@@ -1,10 +1,9 @@
+namespace IdentityService;
 using IdentityService.Data;
 using IdentityService.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-
-namespace IdentityService;
 
 internal static class HostingExtensions
 {

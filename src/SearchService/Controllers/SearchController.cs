@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿namespace SearchService;
+using Microsoft.AspNetCore.Mvc;
 using MongoDB.Entities;
 using SearchService.Models;
-
-namespace SearchService;
 
 [ApiController]
 [Route("api/search")]

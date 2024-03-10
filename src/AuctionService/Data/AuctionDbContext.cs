@@ -1,8 +1,7 @@
-﻿using AuctionService.Entities;
+﻿namespace AuctionService.Data;
+using AuctionService.Entities;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-
-namespace AuctionService.Data;
 
 public class AuctionDbContext : DbContext
 {

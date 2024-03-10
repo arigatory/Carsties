@@ -2,10 +2,9 @@
 // See LICENSE in the project root for license information.
 
 
+namespace IdentityService.Pages;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace IdentityService.Pages;
 
 public class SecurityHeadersAttribute : ActionFilterAttribute
 {

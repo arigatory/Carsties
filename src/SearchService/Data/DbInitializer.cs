@@ -1,9 +1,8 @@
-﻿using MongoDB.Driver;
+﻿namespace SearchService;
+using MongoDB.Driver;
 using MongoDB.Entities;
 using SearchService.Models;
 using SearchService.Services;
-
-namespace SearchService;
 
 public class DbInitializer
 {
@@ -27,7 +26,7 @@ public class DbInitializer
 
         var items = await httpClient.GetItemsForSearchDb();
 
-        System.Console.WriteLine(items.Count + " returned from the auction service");
+        Console.WriteLine(items.Count + " returned from the auction service");
 
         if (items.Count > 0) await DB.SaveAsync(items);
     }

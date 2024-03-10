@@ -1,3 +1,4 @@
+using BiddingService.Consumers;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MongoDB.Driver;
@@ -11,6 +12,8 @@ builder.Services.AddControllers();
 
 builder.Services.AddMassTransit(x =>
 {
+    x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
+
     x.SetEndpointNameFormatter(new KebabCaseEndpointNameFormatter("bids", false));
 
     x.UsingRabbitMq((context, cfg) =>
@@ -37,6 +40,8 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 builder.Services.AddEndpointsApiExplorer();
 
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -45,7 +50,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-await DB.InitAsync("BidDb", 
+await DB.InitAsync("BidDb",
   MongoClientSettings
     .FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection")));
 

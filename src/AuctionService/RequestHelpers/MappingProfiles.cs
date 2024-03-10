@@ -1,9 +1,8 @@
-﻿using AuctionService.DTOs;
+﻿namespace AuctionService.RequestHelpers;
+using AuctionService.DTOs;
 using AuctionService.Entities;
 using AutoMapper;
 using Contracts;
-
-namespace AuctionService.RequestHelpers;
 
 public class MappingProfiles : Profile
 {

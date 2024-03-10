@@ -1,13 +1,12 @@
 // Copyright (c) Duende Software. All rights reserved.
 // See LICENSE in the project root for license information.
 
+namespace IdentityService.Pages.Ciba;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace IdentityService.Pages.Ciba;
 
 [AllowAnonymous]
 [SecurityHeaders]

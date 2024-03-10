@@ -1,3 +1,4 @@
+namespace IdentityService.Pages.Login;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Models;
 using Duende.IdentityServer.Services;
@@ -8,8 +9,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace IdentityService.Pages.Login;
 
 [SecurityHeaders]
 [AllowAnonymous]
@@ -23,10 +22,10 @@ public class Index : PageModel
     private readonly IIdentityProviderStore _identityProviderStore;
 
     public ViewModel View { get; set; }
-        
+
     [BindProperty]
     public InputModel Input { get; set; }
-        
+
     public Index(
         IIdentityServerInteractionService interaction,
         IAuthenticationSchemeProvider schemeProvider,
@@ -42,11 +41,11 @@ public class Index : PageModel
         _identityProviderStore = identityProviderStore;
         _events = events;
     }
-        
+
     public async Task<IActionResult> OnGet(string returnUrl)
     {
         await BuildModelAsync(returnUrl);
-            
+
         if (View.IsExternalLoginOnly)
         {
             // we only have one option for logging in and it's an external provider
@@ -55,7 +54,7 @@ public class Index : PageModel
 
         return Page();
     }
-        
+
     public async Task<IActionResult> OnPost()
     {
         // check if we are in the context of an authorization request
@@ -66,7 +65,7 @@ public class Index : PageModel
         {
             if (context != null)
             {
-                // if the user cancels, send a result back into IdentityServer as if they 
+                // if the user cancels, send a result back into IdentityServer as if they
                 // denied the consent (even if this client does not require consent).
                 // this will send back an access denied OIDC error response to the client.
                 await _interaction.DenyAuthorizationAsync(context, AuthorizationError.AccessDenied);
@@ -133,14 +132,14 @@ public class Index : PageModel
         await BuildModelAsync(Input.ReturnUrl);
         return Page();
     }
-        
+
     private async Task BuildModelAsync(string returnUrl)
     {
         Input = new InputModel
         {
             ReturnUrl = returnUrl
         };
-            
+
         var context = await _interaction.GetAuthorizationContextAsync(returnUrl);
         if (context?.IdP != null && await _schemeProvider.GetSchemeAsync(context.IdP) != null)
         {

@@ -2,12 +2,11 @@
 // See LICENSE in the project root for license information.
 
 
+namespace IdentityService.Pages.Diagnostics;
 using IdentityModel;
 using Microsoft.AspNetCore.Authentication;
 using System.Text;
 using System.Text.Json;
-
-namespace IdentityService.Pages.Diagnostics;
 
 public class ViewModel
 {

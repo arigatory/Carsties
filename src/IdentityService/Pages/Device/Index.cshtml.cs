@@ -1,3 +1,4 @@
+namespace IdentityService.Pages.Device;
 using Duende.IdentityServer.Configuration;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
@@ -9,8 +10,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Options;
-
-namespace IdentityService.Pages.Device;
 
 [SecurityHeaders]
 [Authorize]
@@ -56,7 +55,7 @@ public class Index : PageModel
             return Page();
         }
 
-        Input = new InputModel { 
+        Input = new InputModel {
             UserCode = userCode,
         };
 

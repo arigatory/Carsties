@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace IdentityService;
+﻿namespace IdentityService;
+using System.ComponentModel.DataAnnotations;
 
 public class RegisterViewModel
 {

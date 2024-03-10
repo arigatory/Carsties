@@ -1,6 +1,5 @@
-using System.ComponentModel.DataAnnotations.Schema;
-
 namespace AuctionService.Entities;
+using System.ComponentModel.DataAnnotations.Schema;
 
 [Table("Items")]
 public class Item

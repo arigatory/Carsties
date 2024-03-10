@@ -1,3 +1,4 @@
+namespace IdentityService.Pages.Consent;
 using Duende.IdentityServer.Events;
 using Duende.IdentityServer.Extensions;
 using Duende.IdentityServer.Models;
@@ -7,8 +8,6 @@ using IdentityModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace IdentityService.Pages.Consent;
 
 [Authorize]
 [SecurityHeadersAttribute]
@@ -29,7 +28,7 @@ public class Index : PageModel
     }
 
     public ViewModel View { get; set; }
-        
+
     [BindProperty]
     public InputModel Input { get; set; }
 

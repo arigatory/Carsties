@@ -1,9 +1,8 @@
-﻿using Contracts;
+﻿namespace SearchService.Consumers;
+using Contracts;
 using MassTransit;
 using MongoDB.Entities;
 using SearchService.Models;
-
-namespace SearchService;
 
 public class AuctionFinishedConsumer : IConsumer<AuctionFinished>
 {

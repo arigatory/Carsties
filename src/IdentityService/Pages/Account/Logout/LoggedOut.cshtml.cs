@@ -1,21 +1,17 @@
+namespace IdentityService.Pages.Logout;
 using Duende.IdentityServer.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace IdentityService.Pages.Logout;
 
 [SecurityHeaders]
 [AllowAnonymous]
 public class LoggedOut : PageModel
 {
     private readonly IIdentityServerInteractionService _interactionService;
-        
+
     public LoggedOutViewModel View { get; set; }
 
-    public LoggedOut(IIdentityServerInteractionService interactionService)
-    {
-        _interactionService = interactionService;
-    }
+    public LoggedOut(IIdentityServerInteractionService interactionService) => _interactionService = interactionService;
 
     public async Task OnGet(string logoutId)
     {

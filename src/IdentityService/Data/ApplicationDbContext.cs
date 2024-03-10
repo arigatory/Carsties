@@ -1,8 +1,7 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿namespace IdentityService.Data;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using IdentityService.Models;
-
-namespace IdentityService.Data;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 {

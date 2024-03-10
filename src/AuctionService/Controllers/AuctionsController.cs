@@ -1,4 +1,5 @@
-﻿using AuctionService.Data;
+﻿namespace AuctionService;
+using AuctionService.Data;
 using AuctionService.DTOs;
 using AuctionService.Entities;
 using AutoMapper;
@@ -8,8 +9,6 @@ using MassTransit;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
-namespace AuctionService;
 
 [ApiController]
 [Route("api/auctions")]
@@ -46,7 +45,10 @@ public class AuctionsController : ControllerBase
             .Include(x => x.Item)
             .FirstOrDefaultAsync(x => x.Id == id);
 
-        if (auction is null) return NotFound();
+        if (auction is null)
+        {
+            return NotFound();
+        }
 
         return _mapper.Map<AuctionDto>(auction);
     }
@@ -115,7 +117,7 @@ public class AuctionsController : ControllerBase
         _context.Auctions.Remove(auction);
 
         await _publishEndpoint.Publish<AuctionDeleted>(new { Id = auction.Id.ToString() });
-        
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (!result) return BadRequest("Could not update DB");

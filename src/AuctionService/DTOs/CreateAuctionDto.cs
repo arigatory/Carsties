@@ -1,6 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace AuctionService.DTOs;
+﻿namespace AuctionService.DTOs;
+using System.ComponentModel.DataAnnotations;
 
 public class CreateAuctionDto
 {

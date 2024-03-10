@@ -2,12 +2,11 @@
 // See LICENSE in the project root for license information.
 
 
+namespace IdentityService.Pages;
 using Duende.IdentityServer.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-
-namespace IdentityService.Pages;
 
 public static class Extensions
 {
