@@ -113,7 +113,7 @@ services:
       - rabbitmq
 
   notify-svc:
-    image: arigatory/bid-svc:latest
+    image: arigatory/notify-svc:latest
     platform: linux/aarch64
     build:
       context: .
