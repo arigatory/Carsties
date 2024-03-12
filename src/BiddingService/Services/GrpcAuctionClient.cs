@@ -1,51 +1,47 @@
+namespace BiddingService.Services;
+
 using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Threading.Tasks;
 using AuctionService;
 using BiddingService.Models;
 using Grpc.Net.Client;
 
-namespace BiddingService.Services
+public class GrpcAuctionClient
 {
-    public class GrpcAuctionClient
+    private readonly ILogger<GrpcAuctionClient> _logger;
+    private readonly IConfiguration _config;
+
+    public GrpcAuctionClient(ILogger<GrpcAuctionClient> logger,
+        IConfiguration config)
     {
-        private readonly ILogger<GrpcAuctionClient> _logger;
-        private readonly IConfiguration _config;
+        _logger = logger;
+        _config = config;
+    }
 
-        public GrpcAuctionClient(ILogger<GrpcAuctionClient> logger,
-            IConfiguration config)
+    public Auction GetAuction(string id)
+    {
+        _logger.LogInformation("Calling GRPC Service");
+        var channel = GrpcChannel.ForAddress(_config["GrpcAuction"]);
+        var client = new GrpcAuction.GrpcAuctionClient(channel);
+        var request = new GetAuctionRequest { Id = id };
+
+        try
         {
-            _logger = logger;
-            _config = config;
+            var reply = client.GetAuction(request);
+            var auction = new Auction
+            {
+                ID = reply.Auction.Id,
+                AuctionEnd = DateTime.Parse(reply.Auction.AuctionEnd, CultureInfo.InvariantCulture),
+                Seller = reply.Auction.Seller,
+                ReservePrice = reply.Auction.ReservePrice
+            };
+
+            return auction;
         }
-
-        public Auction GetAuction(string id)
+        catch (Exception ex)
         {
-            _logger.LogInformation("Calling GRPC Service");
-            var channel = GrpcChannel.ForAddress(_config["GrpcAuction"]);
-            var client = new GrpcAuction.GrpcAuctionClient(channel);
-            var request = new GetAuctionRequest { Id = id };
-
-            try
-            {
-                var reply = client.GetAuction(request);
-                var auction = new Auction
-                {
-                    ID = reply.Auction.Id,
-                    AuctionEnd = DateTime.Parse(reply.Auction.AuctionEnd, CultureInfo.InvariantCulture),
-                    Seller = reply.Auction.Seller,
-                    ReservePrice = reply.Auction.ReservePrice
-                };
-
-                return auction;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Could not call GRPC Server");
-                return null;
-            }
+            _logger.LogError(ex, "Could not call GRPC Server");
+            return null;
         }
     }
 }

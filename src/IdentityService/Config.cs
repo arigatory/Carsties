@@ -13,15 +13,14 @@ public static class Config
     public static IEnumerable<ApiScope> ApiScopes =>
         new ApiScope[]
         {
-            new ApiScope("auctionApp", "Auction app full access"),
+            new("auctionApp", "Auction app full access"),
         };
 
     public static IEnumerable<Client> Clients =>
         new Client[]
         {
             // interactive client using code flow + pkce
-            new Client
-            {
+            new() {
                 ClientId = "postman",
                 ClientName = "Postman",
                 AllowedScopes = { "openid", "profile", "auctionApp" },
@@ -29,8 +28,7 @@ public static class Config
                 ClientSecrets = { new Secret("NotASecret".Sha256()) },
                 AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
             },
-            new Client
-            {
+            new() {
                 ClientId = "nextApp",
                 ClientName = "nextApp",
                 ClientSecrets = { new Secret("secret".Sha256()) },

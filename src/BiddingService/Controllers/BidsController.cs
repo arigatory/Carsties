@@ -38,11 +38,10 @@ public class BidsController : ControllerBase
         {
             auction = _grpcClient.GetAuction(auctionId);
 
-            if (auction == null) {
+            if (auction == null)
+            {
                 return BadRequest("Cannot accept bids of this auction at this time");
             }
-
-            return NotFound();
         }
 
         if (auction.Seller == User.Identity.Name)
