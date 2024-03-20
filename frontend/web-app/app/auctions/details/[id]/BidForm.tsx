@@ -11,7 +11,7 @@ type Props = {
   hightBid: number;
 };
 
-export default function BidForm({ auctionId, hightBid }: Props) {
+export default function BidForm({ auctionId, hightBid: highBid }: Props) {
   const {
     register,
     handleSubmit,
@@ -21,6 +21,12 @@ export default function BidForm({ auctionId, hightBid }: Props) {
   const addBid = useBidStore((state) => state.addBid);
 
   function onSubmit(data: FieldValues) {
+    if (data.amount <= highBid) {
+      reset();
+      return toast.error(
+        "Bid must be at least $" + numberWithCommas(highBid + 1)
+      );
+    }
     placeBidForAuction(auctionId, +data.amount)
       .then((bid) => {
         if (bid.error) throw bid.error;
@@ -39,7 +45,7 @@ export default function BidForm({ auctionId, hightBid }: Props) {
         {...register("amount")}
         className=" input-custom text-sm text-gray-600"
         placeholder={`Enter your bid (minimum bid is $${numberWithCommas(
-          hightBid + 1
+          highBid + 1
         )})`}
       />
     </form>
