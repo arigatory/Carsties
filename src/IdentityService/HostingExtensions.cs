@@ -1,4 +1,6 @@
 namespace IdentityService;
+
+using Duende.IdentityServer.Services;
 using IdentityService.Data;
 using IdentityService.Models;
 using Microsoft.AspNetCore.Identity;
@@ -28,7 +30,7 @@ internal static class HostingExtensions
 
                 if (builder.Environment.IsEnvironment("Docker"))
                 {
-                  options.IssuerUri = "http://identity-svc";
+                    options.IssuerUri = "http://identity-svc";
                 }
 
                 // see https://docs.duendesoftware.com/identityserver/v6/fundamentals/resources/
@@ -61,6 +63,17 @@ internal static class HostingExtensions
 
         app.UseStaticFiles();
         app.UseRouting();
+
+        if (app.Environment.IsProduction())
+        {
+            app.Use(async (ctx, next) =>
+            {
+                var serverUrls = ctx.RequestServices.GetRequiredService<IServerUrls>();
+                serverUrls.Origin = serverUrls.Origin = "https://id.pelmen.store";
+                await next();
+            });
+        }
+
         app.UseIdentityServer();
         app.UseAuthorization();
 
