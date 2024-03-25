@@ -1,9 +1,7 @@
-namespace BiddingService.Services;
+﻿namespace BiddingService;
 
-using System;
 using System.Globalization;
 using AuctionService;
-using BiddingService.Models;
 using Grpc.Net.Client;
 
 public class GrpcAuctionClient
@@ -11,8 +9,7 @@ public class GrpcAuctionClient
     private readonly ILogger<GrpcAuctionClient> _logger;
     private readonly IConfiguration _config;
 
-    public GrpcAuctionClient(ILogger<GrpcAuctionClient> logger,
-        IConfiguration config)
+    public GrpcAuctionClient(ILogger<GrpcAuctionClient> logger, IConfiguration config)
     {
         _logger = logger;
         _config = config;

@@ -1,5 +1,5 @@
-using BiddingService.Consumers;
-using BiddingService.Services;
+using BiddingService;
+using Contracts;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using MongoDB.Driver;
@@ -11,7 +11,6 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllers();
-
 builder.Services.AddMassTransit(x =>
 {
     x.AddConsumersFromNamespaceContaining<AuctionCreatedConsumer>();
@@ -32,10 +31,10 @@ builder.Services.AddMassTransit(x =>
             host.Username(builder.Configuration.GetValue("RabbitMq:Username", "guest"));
             host.Password(builder.Configuration.GetValue("RabbitMq:Password", "guest"));
         });
+
         cfg.ConfigureEndpoints(context);
     });
 });
-
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -61,10 +60,8 @@ await Policy.Handle<TimeoutException>()
     .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(10))
     .ExecuteAndCaptureAsync(async () =>
     {
-        await DB.InitAsync("BidDb",
-            MongoClientSettings
+        await DB.InitAsync("BidDb", MongoClientSettings
             .FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection")));
-
     });
 
 app.Run();

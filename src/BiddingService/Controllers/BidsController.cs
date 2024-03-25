@@ -1,11 +1,5 @@
-namespace BiddingService.Controllers;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿namespace BiddingService;
 using AutoMapper;
-using BiddingService.DTOs;
-using BiddingService.Models;
-using BiddingService.Services;
 using Contracts;
 using MassTransit;
 using Microsoft.AspNetCore.Authorization;
@@ -38,10 +32,7 @@ public class BidsController : ControllerBase
         {
             auction = _grpcClient.GetAuction(auctionId);
 
-            if (auction == null)
-            {
-                return BadRequest("Cannot accept bids of this auction at this time");
-            }
+            if (auction == null) return BadRequest("Cannot accept bids on this auction at this time");
         }
 
         if (auction.Seller == User.Identity.Name)
@@ -53,7 +44,7 @@ public class BidsController : ControllerBase
         {
             Amount = amount,
             AuctionId = auctionId,
-            Bidder = User.Identity.Name,
+            Bidder = User.Identity.Name
         };
 
         if (auction.AuctionEnd < DateTime.UtcNow)
@@ -63,11 +54,11 @@ public class BidsController : ControllerBase
         else
         {
             var highBid = await DB.Find<Bid>()
-                .Match(a => a.AuctionId == auctionId)
-                .Sort(b => b.Descending(x => x.Amount))
-                .ExecuteFirstAsync();
+                        .Match(a => a.AuctionId == auctionId)
+                        .Sort(b => b.Descending(x => x.Amount))
+                        .ExecuteFirstAsync();
 
-            if ((highBid != null && amount > highBid.Amount) || highBid == null)
+            if (highBid != null && amount > highBid.Amount || highBid == null)
             {
                 bid.BidStatus = amount > auction.ReservePrice
                     ? BidStatus.Accepted

@@ -1,7 +1,5 @@
-namespace BiddingService.RequestHelpers;
+﻿namespace BiddingService;
 using AutoMapper;
-using BiddingService.DTOs;
-using BiddingService.Models;
 using Contracts;
 
 public class MappingProfiles : Profile

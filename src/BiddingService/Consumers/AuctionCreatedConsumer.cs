@@ -1,6 +1,4 @@
-namespace BiddingService.Consumers;
-
-using BiddingService.Models;
+﻿namespace BiddingService;
 using Contracts;
 using MassTransit;
 using MongoDB.Entities;
@@ -18,6 +16,5 @@ public class AuctionCreatedConsumer : IConsumer<AuctionCreated>
         };
 
         await auction.SaveAsync();
-
     }
 }

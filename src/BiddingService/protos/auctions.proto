@@ -7,16 +7,16 @@ service GrpcAuction {
 }
 
 message GetAuctionRequest {
-  string id = 1;
+    string id = 1;
 }
 
 message GrpcAuctionModel {
-  string id = 1;
-  string seller = 2;
-  string auctionEnd = 3;
-  int32 reservePrice = 4;
+    string id = 1;
+    string seller = 2;
+    string auctionEnd = 3;
+    int32 reservePrice = 4;
 }
 
 message GrpcAuctionResponse {
-  GrpcAuctionModel auction = 1;
+    GrpcAuctionModel auction = 1;
 }

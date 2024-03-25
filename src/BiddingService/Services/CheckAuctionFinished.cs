@@ -1,6 +1,4 @@
-namespace BiddingService.Services;
-
-using BiddingService.Models;
+﻿namespace BiddingService;
 using Contracts;
 using MassTransit;
 using MongoDB.Entities;
@@ -10,8 +8,7 @@ public class CheckAuctionFinished : BackgroundService
     private readonly ILogger<CheckAuctionFinished> _logger;
     private readonly IServiceProvider _services;
 
-    public CheckAuctionFinished(ILogger<CheckAuctionFinished> logger,
-        IServiceProvider services)
+    public CheckAuctionFinished(ILogger<CheckAuctionFinished> logger, IServiceProvider services)
     {
         _logger = logger;
         _services = services;
@@ -19,13 +16,26 @@ public class CheckAuctionFinished : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
+
         _logger.LogInformation("Starting check for finished auctions");
 
         stoppingToken.Register(() => _logger.LogInformation("==> Auction check is stopping"));
 
         while (!stoppingToken.IsCancellationRequested)
         {
-            await CheckAuctions(stoppingToken);
+            try
+            {
+
+                await CheckAuctions(stoppingToken);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogInformation("Что-то плохое случилось при попытке проверить аукционы");
+#pragma warning disable CA2254 // Template should be a static expression
+                _logger.LogInformation(ex.Message);
+#pragma warning restore CA2254 // Template should be a static expression
+
+            }
 
             await Task.Delay(5000, stoppingToken);
         }
@@ -33,15 +43,17 @@ public class CheckAuctionFinished : BackgroundService
 
     private async Task CheckAuctions(CancellationToken stoppingToken)
     {
+        System.Console.WriteLine("1" + "*******!!!");
+
         var finishedAuctions = await DB.Find<Auction>()
             .Match(x => x.AuctionEnd <= DateTime.UtcNow)
             .Match(x => !x.Finished)
             .ExecuteAsync(stoppingToken);
+        System.Console.WriteLine("2" + "*******!!!");
 
         if (finishedAuctions.Count == 0)
-        {
             return;
-        }
+        System.Console.WriteLine("3" + "*******!!!");
 
         _logger.LogInformation("==> Found {count} auctions that have completed", finishedAuctions.Count);
 
