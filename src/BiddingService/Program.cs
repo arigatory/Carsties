@@ -45,10 +45,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters.NameClaimType = "username";
     });
 
-
-
-builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddHostedService<CheckAuctionFinished>();
 builder.Services.AddScoped<GrpcAuctionClient>();
@@ -60,13 +56,14 @@ var app = builder.Build();
 app.UseAuthorization();
 
 app.MapControllers();
+
 await Policy.Handle<TimeoutException>()
     .WaitAndRetryAsync(5, retryAttempt => TimeSpan.FromSeconds(10))
     .ExecuteAndCaptureAsync(async () =>
     {
         await DB.InitAsync("BidDb",
-              MongoClientSettings
-                .FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection")));
+            MongoClientSettings
+            .FromConnectionString(builder.Configuration.GetConnectionString("BidDbConnection")));
 
     });
 

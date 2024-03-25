@@ -1,7 +1,5 @@
 namespace BiddingService.Services;
 
-using System;
-using System.Threading.Tasks;
 using BiddingService.Models;
 using Contracts;
 using MassTransit;
@@ -45,7 +43,7 @@ public class CheckAuctionFinished : BackgroundService
             return;
         }
 
-        _logger.LogInformation("==> Found {Count} auctions that have completed", finishedAuctions.Count);
+        _logger.LogInformation("==> Found {count} auctions that have completed", finishedAuctions.Count);
 
         using var scope = _services.CreateScope();
         var endpoint = scope.ServiceProvider.GetRequiredService<IPublishEndpoint>();
@@ -56,7 +54,7 @@ public class CheckAuctionFinished : BackgroundService
             await auction.SaveAsync(null, stoppingToken);
 
             var winningBid = await DB.Find<Bid>()
-                .Match(a => a.ID == auction.ID)
+                .Match(a => a.AuctionId == auction.ID)
                 .Match(b => b.BidStatus == BidStatus.Accepted)
                 .Sort(x => x.Descending(s => s.Amount))
                 .ExecuteFirstAsync(stoppingToken);
@@ -70,6 +68,5 @@ public class CheckAuctionFinished : BackgroundService
                 Seller = auction.Seller
             }, stoppingToken);
         }
-
     }
 }
