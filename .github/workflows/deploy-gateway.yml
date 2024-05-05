@@ -1,15 +1,16 @@
-name: deploy-auction
+name: deploy-gateway
 
 on:
   workflow_dispatch:
   push:
     branches: ["main"]
     paths:
-      - "src/AuctionService/**"
+      - "src/GatewayService/**"
 
 env:
-  REGISTRY_IMAGE: arigatory/auction-svc
-  DOCKERFILE: src/AuctionService/Dockerfile
+  REGISTRY_IMAGE: arigatory/gateway-svc
+  DOCKERFILE: src/GatewayService/Dockerfile
+  DEPLOYMENT_NAME: gateway-svc
 
 jobs:
   build:
@@ -29,3 +30,12 @@ jobs:
           file: ${{ env.DOCKERFILE }}
           push: true
           tags: ${{ env.REGISTRY_IMAGE }}:latest
+      - name: Install doctl
+        uses: digitalocean/action-doctl@v2
+        with:
+          token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
+      - name: Save DigitalOcean kubeconfig
+        run: doctl kubernetes cluster kubeconfig save carsties
+      - name: Restart kubernetes deployment
+        run: kubectl rollout restart deployment ${{ env.DEPLOYMENT_NAME }}
+
